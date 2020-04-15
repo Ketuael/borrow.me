@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
 
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
-        if email == "":
+        if not email:
             raise ValueError('Musisz podac adres email')
         email = self.normalize_email(email)
         user = self.model(username=email, email=email, first_name=first_name, last_name=last_name)
