@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
 
-
+# Custom UserManager is rather useless; left there for double-checking in future
+"""
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
         if not email:
@@ -13,7 +14,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-
+"""
 
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
@@ -21,7 +22,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=50, blank=False)
     avatar = models.ImageField(upload_to="avatars", null=True, blank=True)
 
-    objects = UserManager()
+    objects = BaseUserManager()
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
