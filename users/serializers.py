@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import User
+from django.contrib.auth.models import BaseUserManager
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User(
-            email=validated_data['email'],
+            email=BaseUserManager.normalize_email(validated_data['email']),
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             avatar=validated_data['avatar'],
