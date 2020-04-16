@@ -13,7 +13,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Musisz podac adres email')
         email = self.normalize_email(email)
-        user = self.model(email=email, first_name=first_name, last_name=last_name, avatar=avatar)
+        user = self.model(email=email, first_name=first_name, last_name=last_name, avatar=None)
         user.set_password(password)
         user.save(using=self._db)
         return user
