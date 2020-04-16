@@ -1,14 +1,25 @@
 from rest_framework import serializers
 from django.contrib.auth import password_validation
 from users.models import User
-from django.contrib.auth.models import BaseUserManager
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'avatar', 'password']
+        fields = ['id', 'email', 'first_name', 'last_name']
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
+
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_password(self, data):
@@ -20,11 +31,23 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_password(self, data):
+        password_validation.validate_password(password=data)
+        return data
+
     def update(self, instance, validated_data):
-        super(UserSerializer, self).update(instance, validated_data)
+        super(UpdateUserSerializer, self).update(instance, validated_data)
         user = instance
         if "password" in validated_data:
             user.set_password(validated_data['password'])
         user.save()
         return user
+
 
