@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import password_validation
-from users.models import User
+from users.models import User, Friend
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -8,12 +8,6 @@ class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name']
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -32,6 +26,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
+
+
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -43,11 +44,26 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        super(UpdateUserSerializer, self).update(instance, validated_data)
-        user = instance
+        user = super(UpdateUserSerializer, self).update(instance, validated_data)
         if "password" in validated_data:
             user.set_password(validated_data['password'])
-        user.save()
+            user.save()
         return user
 
 
+class FriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = ['user', 'friends']
+
+
+class AddFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields=['friends']
+
+    def update(self, instance, validated_data):
+        friends = super(AddFriendSerializer, self).update(instance, validated_data)
+        #for user in validated_data['friends']:
+            #Friend.objects.get(user=user).save
+        return friends

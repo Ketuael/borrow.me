@@ -11,7 +11,7 @@ import users.urls
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    path('api/users/', include(users.urls)),
+    path('api/', include(users.urls)),
 ]
 
 urlpatterns += [

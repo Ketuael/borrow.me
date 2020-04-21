@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, first_name=first_name, last_name=last_name, avatar=None)
         user.set_password(password)
         user.save(using=self._db)
+        Friend.objects.create(user=user)
         return user
 
 
@@ -32,5 +33,12 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
     is_anonymous = False
     is_authenticated = True
+
+
+class Friend(models.Model):
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name="owner")
+    friends = models.ManyToManyField(User)
+
+
 
 
