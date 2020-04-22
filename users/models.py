@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 # Create your models here.
 
 
@@ -16,7 +17,6 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, first_name=first_name, last_name=last_name, avatar=None)
         user.set_password(password)
         user.save(using=self._db)
-        Friend.objects.create(user=user)
         return user
 
 
@@ -34,11 +34,13 @@ class User(AbstractBaseUser):
     is_anonymous = False
     is_authenticated = True
 
-
-class Friend(models.Model):
-    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name="owner")
-    friends = models.ManyToManyField(User)
-
+    def get_friends(self):
+        friends = Friendship.objects.filter(active=True, sender=self).filter(active=True, revicer=self)
+        return friends
 
 
+class Friendship(models.Model):
+    sender = models.ForeignKey(User, related_name="friendship_initiator", on_delete=models.CASCADE)
+    reciver = models.ForeignKey(User, related_name="friendship_reciver", on_delete=models.CASCADE)
 
+    active = models.BooleanField(default=False)

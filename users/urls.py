@@ -8,8 +8,13 @@ urlpatterns = [
     path('users/create', views.CreateUserView.as_view(), name='user-create'),
     path('users/<int:pk>/', views.UserDetailView.as_view(), name='user-details'),
     path('users/<int:pk>/update', views.UpdateUserView.as_view(), name='user-update'),
-    path('friends/<int:pk>/', views.FriendListView.as_view(), name='friend-list'),
-    path('friends/<int:pk>/add', views.AddFriendView.as_view(), name='friend-add'),
+]
+
+urlpatterns += [
+    path('friends/', views.FriendshipListView.as_view(), name='friend-list'),
+    path('friends/add', views.AddFriendView.as_view(), name='friend-add'),
+    path('friends/<int:pk>', views.DetailFriendView.as_view(), name='friend-detail'),
+    path('friends/<int:pk>/manage', views.ManageFriendView.as_view(), name='friend-manage'),
 ]
 
 
