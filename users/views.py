@@ -1,7 +1,7 @@
 from rest_framework import generics
 from users.models import User, Friendship
 from users.serializers import UserListSerializer, UserDetailSerializer, CreateUserSerializer, UpdateUserSerializer
-from users.serializers import FriendshipSerializer
+from users.serializers import FriendshipListSerializer, FriendshipDetailSerializer, AddFriendSerializer, ConfirmFriendshipSerializer, RemoveFriendSerializer
 from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -60,21 +60,29 @@ class UpdateUserView(generics.RetrieveUpdateDestroyAPIView):
 
 class FriendshipListView(generics.ListAPIView):
     queryset = Friendship.objects.all()
-    serializer_class = FriendshipSerializer
+    serializer_class = FriendshipListSerializer
+
+
+class FriendshipDetailView(generics.RetrieveAPIView):
+    queryset = Friendship.objects.all()
+    serializer_class = FriendshipDetailSerializer
 
 
 class AddFriendView(generics.CreateAPIView):
     queryset = Friendship.objects.all()
-    serializer_class = FriendshipSerializer
+    serializer_class = AddFriendSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
 
 
-class DetailFriendView(generics.RetrieveAPIView):
+class ConfirmFriendshipView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Friendship.objects.all()
-    serializer_class = FriendshipSerializer
+    serializer_class = ConfirmFriendshipSerializer
 
 
-class ManageFriendView(generics.RetrieveUpdateDestroyAPIView):
+class RemoveFriendView(generics.RetrieveDestroyAPIView):
     queryset = Friendship.objects.all()
-    serializer_class = FriendshipSerializer
+    serializer_class = RemoveFriendSerializer
 
 

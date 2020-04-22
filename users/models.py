@@ -54,3 +54,5 @@ class Friendship(models.Model):
     receiver = models.ForeignKey(User, related_name="friendship_receiver", on_delete=models.CASCADE)
 
     confirmed = models.BooleanField(default=False)
+
+
