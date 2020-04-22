@@ -11,12 +11,24 @@ from users.permissions import IsSelf
 
 # Create your views here.
 
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'Users API': reverse('users-api', request=request, format=format),
+        'Friends API': reverse('friends-api', request=request, format=format),
+    })
 
 @api_view(['GET'])
 def users_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'users/create': reverse('user-create', request=request, format=format),
+    })
+
+
+@api_view(['GET'])
+def friends_root(request, format=None):
+    return Response({
         'friends/': reverse('friend-list', request=request, format=format),
         'friends/add': reverse('friend-add', request=request, format=format),
     })

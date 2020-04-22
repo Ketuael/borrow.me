@@ -7,7 +7,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -28,9 +28,16 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
+    friends = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar', 'friends']
+
+    def get_friends(self, obj):
+        user = obj
+        friends = user.get_friends()
+        return friends
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -54,6 +61,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 class FriendshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Friendship
-        fields = ['id', 'sender', 'reciver', 'active']
+        fields = ['id', 'sender', 'receiver', 'confirmed']
 
 

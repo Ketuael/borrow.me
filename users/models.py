@@ -35,12 +35,22 @@ class User(AbstractBaseUser):
     is_authenticated = True
 
     def get_friends(self):
-        friends = Friendship.objects.filter(active=True, sender=self).filter(active=True, revicer=self)
-        return friends
+        friends1 = Friendship.objects.filter(confirmed=True, sender=self)
+        friends2 = Friendship.objects.filter(confirmed=True, receiver=self)
+        friends = friends1.union(friends2)
+
+        friend_list = []
+        for friend in friends:
+            if friend.sender == self:
+                friend_list.append(friend.receiver.id)
+            else:
+                friend_list.append(friend.sender.id)
+
+        return sorted(friend_list)
 
 
 class Friendship(models.Model):
     sender = models.ForeignKey(User, related_name="friendship_initiator", on_delete=models.CASCADE)
-    reciver = models.ForeignKey(User, related_name="friendship_reciver", on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name="friendship_receiver", on_delete=models.CASCADE)
 
-    active = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False)
