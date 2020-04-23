@@ -4,6 +4,9 @@ from users import views
 
 urlpatterns = [
     path('', views.api_root),
+]
+
+urlpatterns += [
     path('users', views.users_root, name='users-api'),
     path('users/', views.UserListView.as_view(), name='user-list'),
     path('users/create', views.CreateUserView.as_view(), name='user-create'),
@@ -15,9 +18,9 @@ urlpatterns += [
     path('friends', views.friends_root, name='friends-api'),
     path('friends/', views.FriendshipListView.as_view(), name='friend-list'),
     path('friends/add', views.AddFriendView.as_view(), name='friend-add'),
-    path('friends/<int:pk>', views.FriendshipDetailView.as_view(), name='friend-detail'),
-    path('friends/<int:pk>/confirmation', views.ConfirmFriendshipView.as_view(), name='friend-manage'),
-    path('friends/<int:pk>/remove', views.RemoveFriendView.as_view(), name='friend-manage'),
+    path('friends/<int:pk>/', views.FriendshipDetailView.as_view(), name='friend-detail'),
+    path('friends/<int:pk>/confirmation', views.ConfirmFriendshipView.as_view(), name='friend-confirmation'),
+    path('friends/<int:pk>/remove', views.RemoveFriendView.as_view(), name='friend-remove'),
 ]
 
 
