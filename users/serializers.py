@@ -7,6 +7,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+<<<<<<< HEAD
         fields = ['id', 'email', 'first_name', 'last_name']
 
 
@@ -14,6 +15,23 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
+=======
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+
+    friends = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'avatar', 'friends']
+
+    def get_friends(self, obj):
+        user = obj
+        friends = user.get_friends()
+        return friends
+>>>>>>> develop
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -43,11 +61,18 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
+<<<<<<< HEAD
         super(UpdateUserSerializer, self).update(instance, validated_data)
         user = instance
         if "password" in validated_data:
             user.set_password(validated_data['password'])
         user.save()
+=======
+        user = super(UpdateUserSerializer, self).update(instance, validated_data)
+        if "password" in validated_data:
+            user.set_password(validated_data['password'])
+            user.save()
+>>>>>>> develop
         return user
 
 
