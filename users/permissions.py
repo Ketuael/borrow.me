@@ -11,6 +11,10 @@ class IsSelf(permissions.BasePermission):
         return obj == request.user
 
 
+class IsFriend(permissions.BasePermission):
+    pass
+
+
 class IsInFriendship(permissions.BasePermission):
     """
     For Friendship-based views:
