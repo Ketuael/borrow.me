@@ -1,8 +1,8 @@
 from rest_framework import generics
 from users.models import User
 from users.serializers import UserListSerializer, UserDetailSerializer, CreateUserSerializer, UpdateUserSerializer
-from rest_framework import permissions
-from users.permissions import IsSelf
+from rest_framework import filters
+from users.permissions import IsSelf, IsFriend
 
 # Create your views here.
 
@@ -10,11 +10,15 @@ from users.permissions import IsSelf
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['email', 'first_name', 'last_name']
 
 
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
+
+    #permission_classes = [IsSelf | IsFriend]
 
 
 class CreateUserView(generics.CreateAPIView):
