@@ -1,7 +1,7 @@
 from rest_framework import generics
+from rest_framework import filters
 from users.models import User
 from users.serializers import UserListSerializer, UserDetailSerializer, CreateUserSerializer, UpdateUserSerializer
-from rest_framework import filters
 from users.permissions import IsSelf, IsFriend
 
 
