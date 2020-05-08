@@ -13,14 +13,15 @@ def api_root(request, format=None):
 @api_view(['GET'])
 def users_api_root(request, format=None):
     return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'users/create': reverse('user-create', request=request, format=format),
+        'User list': reverse('user-list', request=request, format=format),
+        'Login view (POST only)': reverse('user-login', request=request, format=format),
+        'Create view': reverse('user-create', request=request, format=format),
     })
 
 
 @api_view(['GET'])
 def friends_api_root(request, format=None):
     return Response({
-        'friends/': reverse('friend-list', request=request, format=format),
-        'friends/add': reverse('friend-add', request=request, format=format),
+        'Friends list': reverse('friend-list', request=request, format=format),
+        'Add friend view': reverse('friend-add', request=request, format=format),
     })
