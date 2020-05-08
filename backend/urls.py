@@ -25,13 +25,12 @@ urlpatterns = [
     path('api/', api_root, name='api-root'),
     path(users_root_url, users_api_root, name='users-api'),
     path(friends_root_url, friends_api_root, name='friends-api'),
-    path('hello/', user_views.HelloView.as_view(), name='hello'),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
 
 
 urlpatterns += [
     path(users_root_url + '/', user_views.UserListView.as_view(), name='user-list'),
+    path(users_root_url + '/login', obtain_auth_token, name='api_token_auth'),
     path(users_root_url + '/create', user_views.CreateUserView.as_view(), name='user-create'),
     path(users_root_url + '/<int:pk>/', user_views.UserDetailView.as_view(), name='user-details'),
     path(users_root_url + '/<int:pk>/update', user_views.UpdateUserView.as_view(), name='user-update'),
