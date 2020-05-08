@@ -26,7 +26,7 @@ SECRET_KEY = 'a=+e$kqrqc@#rh69=f8m=-&r8&lql(=3aba(pq#%4l%&a1#yzj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ketuael.eu.pythonanywhere.com']
+ALLOWED_HOSTS = ['ketuael.eu.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
