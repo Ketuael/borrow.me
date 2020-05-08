@@ -2,6 +2,7 @@
 
 ### API branch for project "borrow.me"
 Aby uzyskać działające API na swoim urządzeniu, należy:
+
 0. Mieć zainstalowanego Pythona w wersji 3.6
 1. Sklonować to repozytorium
 2. Stworzyć pythonowe venv / utworzyć projekt w PyCharmie
