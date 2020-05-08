@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from .api import api_root, users_api_root, friends_api_root
 from users import views as user_views
 from friendships import views as friend_views
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 def go_to_api(request):
@@ -24,6 +25,8 @@ urlpatterns = [
     path('api/', api_root, name='api-root'),
     path(users_root_url, users_api_root, name='users-api'),
     path(friends_root_url, friends_api_root, name='friends-api'),
+    path('hello/', user_views.HelloView.as_view(), name='hello'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
 
 
