@@ -10,10 +10,6 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
 
-class UserFriendsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'first_name', 'last_name']
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
@@ -31,10 +27,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
         friend_list = []
         for friend in friends:
             if friend.sender == obj:
-                user = UserFriendsSerializer(friend.receiver)
+                user = UserListSerializer(friend.receiver)
                 friend_list.append([user.data, friend.confirmed])
             else:
-                user = UserFriendsSerializer(friend.sender)
+                user = UserListSerializer(friend.sender)
                 friend_list.append([user.data, friend.confirmed])
 
         return friend_list
