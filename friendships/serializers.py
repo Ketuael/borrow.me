@@ -1,12 +1,23 @@
 from rest_framework import serializers
+from users.serializers import UserListSerializer
 from friendships.models import Friendship
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 
 class FriendshipListSerializer(serializers.ModelSerializer):
+
+    sender = serializers.SerializerMethodField()
+    receiver = serializers.SerializerMethodField()
+
     class Meta:
         model = Friendship
         fields = ['id', 'sender', 'receiver', 'confirmed']
+
+    def get_sender(self, obj):
+        return UserListSerializer(obj.sender).data
+
+    def get_receiver(self, obj):
+        return UserListSerializer(obj.receiver).data
 
 
 class FriendshipDetailSerializer(serializers.ModelSerializer):
@@ -19,14 +30,10 @@ class FriendshipDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'sender', 'receiver', 'confirmed']
 
     def get_sender(self, obj):
-        user = obj.sender
-        sender = [user.id, user.email, user.first_name, user.last_name]
-        return sender
+        return UserListSerializer(obj.sender).data
 
     def get_receiver(self, obj):
-        user = obj.receiver
-        receiver = [user.id, user.email, user.first_name, user.last_name]
-        return receiver
+        return UserListSerializer(obj.receiver).data
 
 
 class AddFriendSerializer(serializers.ModelSerializer):
