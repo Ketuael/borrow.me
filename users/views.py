@@ -23,6 +23,7 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
         })
 
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer

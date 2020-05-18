@@ -22,7 +22,7 @@ class FriendshipDetailSerializer(serializers.ModelSerializer):
 
     def get_sender(self, obj):
         user = obj.sender
-        sender = [user.id, user.email, user.first_name, user.last_name, MEDIA_ROOT + str(user.avatar)]
+        sender = [user.id, user.email, user.first_name, user.last_name]
         return sender
 
     def get_receiver(self, obj):
