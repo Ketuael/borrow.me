@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import password_validation
 from users.models import User
+from friendships.models import Friendship
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -9,6 +10,10 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'avatar']
 
+class UserFriendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name']
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
@@ -19,9 +24,20 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'first_name', 'last_name', 'avatar', 'friends']
 
     def get_friends(self, obj):
-        user = obj
-        friends = user.get_friends()
-        return friends
+        friends1 = Friendship.objects.filter(sender=obj)
+        friends2 = Friendship.objects.filter(receiver=obj)
+        friends = friends1.union(friends2)
+
+        friend_list = []
+        for friend in friends:
+            if friend.sender == obj:
+                user = UserFriendsSerializer(friend.receiver)
+                friend_list.append([user.data, friend.confirmed])
+            else:
+                user = UserFriendsSerializer(friend.sender)
+                friend_list.append([user.data, friend.confirmed])
+
+        return friend_list
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

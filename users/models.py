@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from friendships.models import Friendship
 
 
 # Create your models here.
@@ -34,19 +33,4 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
     is_anonymous = False
     is_authenticated = True
-
-    def get_friends(self):
-        friends1 = Friendship.objects.filter(sender=self)
-        friends2 = Friendship.objects.filter(receiver=self)
-        friends = friends1.union(friends2)
-
-        friend_list = []
-        for friend in friends:
-            if friend.sender == self:
-                friend_list.append([friend.receiver.id, friend.receiver.email, friend.receiver.first_name, friend.receiver.last_name, friend.confirmed])
-            else:
-                friend_list.append([friend.sender.id, friend.sender.email, friend.sender.first_name, friend.sender.last_name, friend.confirmed])
-
-        return sorted(friend_list)
-
 

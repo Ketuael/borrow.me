@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from friendships.models import Friendship
-from users.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from backend.settings import MEDIA_ROOT
 
 
 class FriendshipListSerializer(serializers.ModelSerializer):
