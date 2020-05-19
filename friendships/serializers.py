@@ -6,34 +6,42 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 class FriendshipListSerializer(serializers.ModelSerializer):
 
-    sender = serializers.SerializerMethodField()
-    receiver = serializers.SerializerMethodField()
+    friend = serializers.SerializerMethodField()
+    has_to_accept = serializers.SerializerMethodField()
 
     class Meta:
         model = Friendship
-        fields = ['id', 'sender', 'receiver', 'confirmed']
+        fields = ['id', 'confirmed', 'has_to_accept', 'friend']
 
-    def get_sender(self, obj):
-        return UserListSerializer(obj.sender).data
+    def get_friend(self, obj):
+        user = self.context['request'].user
+        if obj.sender == user:
+            return UserListSerializer(obj.receiver).data
+        else:
+            return UserListSerializer(obj.sender).data
 
-    def get_receiver(self, obj):
-        return UserListSerializer(obj.receiver).data
+    def get_has_to_accept(self, obj):
+        user = self.context['request'].user
+        if obj.receiver == user and not obj.confirmed:
+            return True
+        else:
+            return False
 
 
 class FriendshipDetailSerializer(serializers.ModelSerializer):
 
-    sender = serializers.SerializerMethodField()
-    receiver = serializers.SerializerMethodField()
+    friend = serializers.SerializerMethodField()
 
     class Meta:
         model = Friendship
-        fields = ['id', 'sender', 'receiver', 'confirmed']
+        fields = ['id', 'confirmed', 'friend']
 
-    def get_sender(self, obj):
-        return UserListSerializer(obj.sender).data
-
-    def get_receiver(self, obj):
-        return UserListSerializer(obj.receiver).data
+    def get_friend(self, obj):
+        user = self.context['request'].user
+        if obj.sender == user:
+            return UserListSerializer(obj.receiver).data
+        else:
+            return UserListSerializer(obj.sender).data
 
 
 class AddFriendSerializer(serializers.ModelSerializer):
