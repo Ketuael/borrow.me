@@ -14,8 +14,9 @@ def api_root(request, format=None):
 def users_api_root(request, format=None):
     return Response({
         'User list': reverse('user-list', request=request, format=format),
-        'Login view (POST only)': reverse('user-login', request=request, format=format),
-        'Create view': reverse('user-create', request=request, format=format),
+        'Create user': reverse('user-create', request=request, format=format),
+        'Login (POST only)': reverse('user-login', request=request, format=format),
+        'Logout (DELETE only)': reverse('user-logout', request=request, format=format),
     })
 
 
