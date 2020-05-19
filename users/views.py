@@ -1,6 +1,5 @@
-from rest_framework import generics
+from rest_framework import generics, filters, status
 from rest_framework.views import APIView
-from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -33,9 +32,9 @@ class RemoveAuthToken(APIView):
     def delete(self, request, *args, **kwargs):
         if len(list(Token.objects.filter(user=request.user))):
             Token.objects.filter(user=request.user).delete()
-            return Response('Removed your Token, see you next time!')
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response('You don\'t have Token! Go logout on your API page.')
+            return Response({'info':'You don\'t have Token! Go logout on your API page.'})
 
 
 class UserListView(generics.ListAPIView):
