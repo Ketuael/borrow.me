@@ -28,10 +28,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
         for friend in friends:
             if friend.sender == obj:
                 user = UserListSerializer(friend.receiver)
-                friend_list.append([user.data, friend.confirmed])
+                friend_list.append([user.data, friend.confirmed, friend.id])
             else:
                 user = UserListSerializer(friend.sender)
-                friend_list.append([user.data, friend.confirmed])
+                friend_list.append([user.data, friend.confirmed, friend.id])
 
         return friend_list
 
