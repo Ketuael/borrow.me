@@ -35,7 +35,7 @@ class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
 
-    #permission_classes = [IsSelf | IsFriend]
+    permission_classes = [IsSelf | IsFriend]
 
 
 class CreateUserView(generics.CreateAPIView):

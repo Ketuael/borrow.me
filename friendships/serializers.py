@@ -34,7 +34,7 @@ class FriendshipDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Friendship
-        fields = ['id', 'confirmed', 'friend']
+        fields = ['id', 'friend']
 
     def get_friend(self, obj):
         user = self.context['request'].user
