@@ -2,6 +2,25 @@ from rest_framework import serializers
 from django.contrib.auth import password_validation
 from users.models import User
 from friendships.models import Friendship
+from transactions.models import MoneyTransaction
+
+
+def get_balance(self, obj):
+    user = self.context['request'].user
+    friend = obj
+
+    given = 0
+    taken = 0
+
+    for transaction in MoneyTransaction.objects.all():
+        if transaction.giver == user and transaction.taker == friend:
+            given += transaction.ammount
+        elif transaction.giver == friend and transaction.taker == user:
+            taken += transaction.ammount
+
+    balance = given - taken
+
+    return {"given": given, "taken": taken, "total_balance": balance}
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -26,12 +45,15 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
         friend_list = []
         for friend in friends:
+
             if friend.sender == obj:
                 user = UserListSerializer(friend.receiver)
-                friend_list.append([user.data, friend.confirmed, friend.id])
+                balance = get_balance(self, friend.receiver)
+                friend_list.append([user.data, friend.confirmed, friend.id, balance])
             else:
                 user = UserListSerializer(friend.sender)
-                friend_list.append([user.data, friend.confirmed, friend.id])
+                balance = get_balance(self, friend.sender)
+                friend_list.append([user.data, friend.confirmed, friend.id, balance])
 
         return friend_list
 
