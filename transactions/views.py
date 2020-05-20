@@ -56,10 +56,3 @@ class CreateMoneyTransactionView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class BalanceView(generics.ListAPIView):
-    queryset = MoneyTransaction.objects.all()
-    serializer_class = BalanceSerializer
-
-    permission_classes = [permissions.IsAuthenticated]
-
-

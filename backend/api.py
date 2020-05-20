@@ -35,7 +35,6 @@ def transactions_api_root(request, format=None):
         'transactions/items/create': reverse('transaction-create', request=request, format=format),
         'transactions/money': reverse('money-list', request=request, format=format),
         'transactions/money/create': reverse('money-create', request=request, format=format),
-        #'transactions/money/balance': reverse('balance', request=request, format=format),
     })
 
 

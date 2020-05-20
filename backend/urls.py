@@ -59,7 +59,6 @@ urlpatterns += [
 urlpatterns += [
     path(transactions_root_url + '/money/', transaction_views.MoneyTransactionsListView.as_view(), name='money-list'),
     path(transactions_root_url + '/money/create', transaction_views.CreateMoneyTransactionView.as_view(), name='money-create'),
-    #path(transactions_root_url + '/<int:pk>/balance', transaction_views.BalanceView.as_view(), name='balance'),
 ]
 
 

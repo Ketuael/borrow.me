@@ -97,20 +97,3 @@ class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
         return transaction
 
 
-class BalanceSerializer(serializers.ModelSerializer):
-
-    friend = serializers.SerializerMethodField()
-
-    class Meta:
-        model = MoneyTransaction
-        fields = ['id', 'friend', 'ammount']
-
-    def get_friend(self, obj):
-        user = self.context['request'].user
-
-        if obj.giver == user:
-            return UserListSerializer(obj.taker).data
-        else:
-            return UserListSerializer(obj.giver).data
-
-
