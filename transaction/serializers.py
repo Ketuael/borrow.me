@@ -1,12 +1,22 @@
 from rest_framework import serializers
 from datetime import date
+from users.serializers import UserListSerializer
 from transaction.models import Transaction
 
 
 class TransactionsListSerializer(serializers.ModelSerializer):
+    giver = serializers.SerializerMethodField()
+    taker = serializers.SerializerMethodField()
+
     class Meta:
         model = Transaction
         fields = ['id', 'giver', 'taker', 'name', 'description', 'pub_date', 'due_date', 'status']
+
+    def get_giver(self, obj):
+        return UserListSerializer(obj.giver).data
+
+    def get_taker(self, obj):
+        return UserListSerializer(obj.taker).data
 
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
