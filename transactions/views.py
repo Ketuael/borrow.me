@@ -48,6 +48,7 @@ class MoneyTransactionsListView(generics.ListAPIView):
         taker = MoneyTransaction.objects.filter(taker=user)
         return giver.union(taker)
 
+
 class CreateMoneyTransactionView(generics.CreateAPIView):
     queryset = MoneyTransaction.objects.all()
     serializer_class = CreateMoneyTransactionSerializer
