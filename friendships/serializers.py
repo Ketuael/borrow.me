@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from users.serializers import UserListSerializer
 from friendships.models import Friendship
+from transactions.models import MoneyTransaction
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 
@@ -8,10 +9,11 @@ class FriendshipListSerializer(serializers.ModelSerializer):
 
     friend = serializers.SerializerMethodField()
     has_to_accept = serializers.SerializerMethodField()
+    balance = serializers.SerializerMethodField()
 
     class Meta:
         model = Friendship
-        fields = ['id', 'confirmed', 'has_to_accept', 'friend']
+        fields = ['id', 'confirmed', 'has_to_accept', 'friend', 'balance']
 
     def get_friend(self, obj):
         user = self.context['request'].user
@@ -26,6 +28,23 @@ class FriendshipListSerializer(serializers.ModelSerializer):
             return True
         else:
             return False
+
+    def get_balance(self, obj):
+        user = self.context['request'].user
+        friend = self.get_friend(obj)
+
+        given = 0
+        taken = 0
+
+        for transaction in MoneyTransaction.objects.all():
+            if transaction.giver == user and transaction.taker.id == friend["id"]:
+                given += transaction.ammount
+            elif transaction.giver.id == friend["id"] and transaction.taker == user:
+                taken += transaction.ammount
+
+        balance = given - taken
+
+        return {"given":given, "taken":taken, "total_balance":balance}
 
 
 class FriendshipDetailSerializer(serializers.ModelSerializer):
