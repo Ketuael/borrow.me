@@ -30,5 +30,6 @@ def friends_api_root(request, format=None):
 def transactions_api_root(request, format=None):
     return Response({
         'transactions/': reverse('transaction-list', request=request, format=format),
-        'transactions/add': reverse('transaction-create', request=request, format=format),
+        'transactions/add/money': reverse('money-create', request=request, format=format),
+        'transactions/add/item': reverse('transaction-create', request=request, format=format),
     })

@@ -17,7 +17,9 @@ class Transaction(models.Model):
     #photo = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 
 
-class TransactionMoney(models.Model):
+class Money(models.Model):
     giver = models.ForeignKey(User, related_name="money_giver", on_delete=models.CASCADE)
     taker = models.ForeignKey(User, related_name="money_taker", on_delete=models.CASCADE)
-    balance = models.IntegerField(blank=False)
+    ammount = models.FloatField(max_length=10, blank=False, default=0)
+
+

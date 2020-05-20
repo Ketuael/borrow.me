@@ -22,6 +22,7 @@ users_root_url = 'api/users'
 friends_root_url = 'api/friends'
 transactions_root_url = 'api/transactions'
 
+
 urlpatterns = [
     path('', go_to_api),
     path('api/', api_root, name='api-root'),
@@ -49,7 +50,10 @@ urlpatterns += [
 
 urlpatterns += [
     path(transactions_root_url + '/', transaction_views.TransactionsListView.as_view(), name='transaction-list'),
+    path(transactions_root_url + '/money', transaction_views.MoneyListView.as_view(), name='money-list'),
+    path(transactions_root_url + '/<int:pk>/balance', transaction_views.BalanceView.as_view(), name='balance-list'),
     path(transactions_root_url + '/create', transaction_views.CreateTransactionView.as_view(), name='transaction-create'),
+    path(transactions_root_url + '/create/money', transaction_views.CreateTransactionMoneyView.as_view(), name='money-create'),
     path(transactions_root_url + '/<int:pk>/update', transaction_views.UpdateTransactionView.as_view(),
          name='transaction-update'),
     path(transactions_root_url + '/<int:pk>/remove',  transaction_views.RemoveTransactionView.as_view(),
