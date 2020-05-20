@@ -8,6 +8,7 @@ def api_root(request, format=None):
     return Response({
         'Users API': reverse('users-api', request=request, format=format),
         'Friends API': reverse('friends-api', request=request, format=format),
+        'Transcations API': reverse('transcations-api', request=request, format=format),
     })
 
 @api_view(['GET'])
@@ -23,4 +24,11 @@ def friends_api_root(request, format=None):
     return Response({
         'friends/': reverse('friend-list', request=request, format=format),
         'friends/add': reverse('friend-add', request=request, format=format),
+    })
+
+@api_view(['GET'])
+def transactions_api_root(request, format=None):
+    return Response({
+        'transactions/': reverse('transaction-list', request=request, format=format),
+        'transactions/add': reverse('transaction-create', request=request, format=format),
     })
