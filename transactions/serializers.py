@@ -1,6 +1,9 @@
-from rest_framework import serializers
 from datetime import date
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers
+
 from users.serializers import UserListSerializer
+from friendships.models import Friendship
 from transactions.models import Transaction, MoneyTransaction
 
 
@@ -35,13 +38,27 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         giver = validated_data['giver']
         taker = validated_data['taker']
-
         due_date = validated_data['due_date']
 
         if giver == taker:
             raise serializers.ValidationError('You already own this item, silly!')
         if date.today() >= due_date:
             raise serializers.ValidationError('You can\'t lend item for the past!')
+
+        is_friend = False
+        try:
+            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            is_friend = True
+        except ObjectDoesNotExist:
+            pass
+        try:
+            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            is_friend = True
+        except ObjectDoesNotExist:
+            pass
+
+        if not is_friend:
+            raise serializers.ValidationError('You aren\'t friend of this User, so you can\'t create transaction with him')
 
         transaction = Transaction.objects.create(**validated_data)
         transaction.save()
@@ -85,12 +102,32 @@ class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
         model = MoneyTransaction
         fields = ['giver', 'taker', 'ammount']
 
+    def validate_ammount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("You must give/take positive ammount of money.")
+        return value
+
     def create(self, validated_data):
         giver = validated_data['giver']
         taker = validated_data['taker']
 
         if giver == taker:
             raise serializers.ValidationError('You can\'t lend money to yourself... do you?')
+        is_friend = False
+
+        try:
+            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            is_friend = True
+        except ObjectDoesNotExist:
+            pass
+        try:
+            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            is_friend = True
+        except ObjectDoesNotExist:
+            pass
+
+        if not is_friend:
+            raise serializers.ValidationError('You aren\'t friend of this User, so you can\'t create transaction with him')
 
         transaction = MoneyTransaction.objects.create(**validated_data)
         transaction.save()
