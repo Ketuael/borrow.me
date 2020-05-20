@@ -20,7 +20,7 @@ def get_balance(self, obj):
 
     balance = given - taken
 
-    return {"given": given, "taken": taken, "total_balance": balance}
+    return balance
 
 
 class UserListSerializer(serializers.ModelSerializer):

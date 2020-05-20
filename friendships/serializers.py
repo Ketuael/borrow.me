@@ -44,7 +44,7 @@ class FriendshipListSerializer(serializers.ModelSerializer):
 
         balance = given - taken
 
-        return {"given":given, "taken":taken, "total_balance":balance}
+        return balance
 
 
 class FriendshipDetailSerializer(serializers.ModelSerializer):
