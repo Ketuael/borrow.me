@@ -50,6 +50,10 @@ urlpatterns += [
 urlpatterns += [
     path(transactions_root_url + '/', transaction_views.TransactionsListView.as_view(), name='transaction-list'),
     path(transactions_root_url + '/create', transaction_views.CreateTransactionView.as_view(), name='transaction-create'),
+    path(transactions_root_url + '/<int:pk>/update', transaction_views.UpdateTransactionView.as_view(),
+         name='transaction-update'),
+    path(transactions_root_url + '/<int:pk>/remove',  transaction_views.RemoveTransactionView.as_view(),
+         name='transaction-remove'),
 ]
 
 urlpatterns += [
