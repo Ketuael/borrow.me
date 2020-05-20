@@ -20,7 +20,7 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
 
-        fields = ['id', 'giver', 'taker', 'name', 'description', 'due_date', 'status']
+        fields = ['id', 'giver', 'taker', 'name', 'description', 'due_date']
 
         def validate(self, data):
             """
