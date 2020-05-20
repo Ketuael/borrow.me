@@ -7,10 +7,11 @@ from transaction.models import Transaction
 class TransactionsListSerializer(serializers.ModelSerializer):
     giver = serializers.SerializerMethodField()
     taker = serializers.SerializerMethodField()
+    user_is_giver = serializers.SerializerMethodField()
 
     class Meta:
         model = Transaction
-        fields = ['id', 'giver', 'taker', 'name', 'description', 'pub_date', 'due_date', 'status']
+        fields = ['id', 'user_is_giver', 'giver', 'taker', 'name', 'description', 'pub_date', 'due_date', 'status']
 
     def get_giver(self, obj):
         return UserListSerializer(obj.giver).data
@@ -18,6 +19,11 @@ class TransactionsListSerializer(serializers.ModelSerializer):
     def get_taker(self, obj):
         return UserListSerializer(obj.taker).data
 
+    def get_user_is_giver(self, obj):
+        if obj.giver == serializers.CurrentUserDefault():
+            return True
+        else:
+            return False
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
