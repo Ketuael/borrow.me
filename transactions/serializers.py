@@ -52,7 +52,7 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             pass
         try:
-            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            Friendship.objects.get(sender=taker, receiver=giver, confirmed=True)
             is_friend = True
         except ObjectDoesNotExist:
             pass
@@ -130,7 +130,7 @@ class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             pass
         try:
-            Friendship.objects.get(sender=giver, receiver=taker, confirmed=True)
+            Friendship.objects.get(sender=taker, receiver=giver, confirmed=True)
             is_friend = True
         except ObjectDoesNotExist:
             pass
