@@ -20,7 +20,7 @@ class TransactionsListSerializer(serializers.ModelSerializer):
         return UserListSerializer(obj.taker).data
 
     def get_user_is_giver(self, obj):
-        if obj.giver == serializers.CurrentUserDefault():
+        if obj.giver == self.context['request'].user:
             return True
         else:
             return False
