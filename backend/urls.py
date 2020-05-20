@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from friendships import views as friend_views
 from users import views as user_views
-from transaction import views as transaction_views
+from transactions import views as transaction_views
 from .api import api_root, users_api_root, friends_api_root, transactions_api_root
 
 

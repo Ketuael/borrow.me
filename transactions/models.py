@@ -17,3 +17,9 @@ class Transaction(models.Model):
     status = models.CharField(max_length=50, blank=False, default='not_confirmed')
     #photo = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 
+
+class MoneyTransaction(models.Model):
+    giver = models.ForeignKey(User, related_name="money_giver", on_delete=models.CASCADE)
+    taker = models.ForeignKey(User, related_name="money_taker", on_delete=models.CASCADE)
+    #sender_is_giver = models.BooleanField(blank=False, default=True)
+    ammount = models.IntegerField(blank=False, default=0)

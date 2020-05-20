@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from datetime import date
 from users.serializers import UserListSerializer
-from transaction.models import Transaction
+from transactions.models import Transaction, MoneyTransaction
 
 
 class TransactionsListSerializer(serializers.ModelSerializer):
@@ -24,6 +24,7 @@ class TransactionsListSerializer(serializers.ModelSerializer):
             return True
         else:
             return False
+
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,3 +52,47 @@ class UpdateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ['name', 'description', 'due_date', 'status']
+
+    # item - monetary divider
+
+
+class MoneyTransactionsListSerializer(serializers.ModelSerializer):
+
+    friend = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MoneyTransaction
+        fields = ['id', 'giver', 'taker', 'ammount']
+
+    def get_friend(self, obj):
+        user = self.context['request'].user
+
+        if obj.giver == user:
+            return UserListSerializer(obj.taker).data
+        else:
+            return UserListSerializer(obj.giver).data
+
+
+class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MoneyTransaction
+        fields = ['giver', 'taker', 'ammount']
+
+
+class BalanceSerializer(serializers.ModelSerializer):
+
+    friend = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MoneyTransaction
+        fields = ['id', 'friend', 'ammount']
+
+    def get_friend(self, obj):
+        user = self.context['request'].user
+
+        if obj.giver == user:
+            return UserListSerializer(obj.taker).data
+        else:
+            return UserListSerializer(obj.giver).data
+
+
