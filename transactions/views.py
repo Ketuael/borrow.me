@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from transactions.models import Transaction, MoneyTransaction
 from transactions.serializers import TransactionsListSerializer, CreateTransactionSerializer, UpdateTransactionSerializer
-from transactions.serializers import MoneyTransactionsListSerializer, CreateMoneyTransactionSerializer, BalanceSerializer
+from transactions.serializers import MoneyTransactionsListSerializer, CreateMoneyTransactionSerializer
 from transactions.permissions import IsInTransaction
 # Create your views here.
 
