@@ -7,10 +7,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
-from .api import api_root, users_api_root, friends_api_root
-from users import views as user_views
 from friendships import views as friend_views
-#from rest_framework.authtoken.views import obtain_auth_token
+from users import views as user_views
+from transaction import views as transaction_views
+from .api import api_root, users_api_root, friends_api_root, transactions_api_root
 
 
 def go_to_api(request):
@@ -19,13 +19,15 @@ def go_to_api(request):
 
 users_root_url = 'api/users'
 friends_root_url = 'api/friends'
+transactions_root_url = 'api/transactions'
+
 
 urlpatterns = [
     path('', go_to_api),
     path('api/', api_root, name='api-root'),
     path(users_root_url, users_api_root, name='users-api'),
     path(friends_root_url, friends_api_root, name='friends-api'),
-]
+    path(transactions_root_url, transactions_api_root, name='transcations-api'),
 
 
 urlpatterns += [
@@ -46,6 +48,15 @@ urlpatterns += [
     path(friends_root_url + '/<int:pk>/remove', friend_views.RemoveFriendView.as_view(), name='friend-remove'),
 ]
 
+urlpatterns += [
+    path(transactions_root_url + '/items/', transaction_views.TransactionsListView.as_view(), name='transaction-list'),
+    # path(transactions_root_url + '/money/', transaction_views.MoneyListView.as_view(), name='money-list'),
+    path(transactions_root_url + '/create/item', transaction_views.CreateTransactionView.as_view(), name='transaction-create'),
+    #path(transactions_root_url + '/create/money', transaction_views.CreateTransactionMoneyView.as_view(), name='money-create'),
+    path(transactions_root_url + '/items/<int:pk>/update', transaction_views.UpdateTransactionView.as_view(),
+         name='transaction-update'),
+    # path(transactions_root_url + '/<int:pk>/balance', transaction_views.BalanceView.as_view(), name='balance-list'),
+]
 
 urlpatterns += [
     path('api-auth/', include('rest_framework.urls')),
