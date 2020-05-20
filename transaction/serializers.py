@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from rest_framework import serializers, generics
 from rest_framework.exceptions import ValidationError
-
+from datetime import date
 from transaction.models import Transaction, Money
 from users.models import User
 # Create your tests here.
@@ -20,15 +20,22 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
 
-        fields = ['id', 'giver', 'taker', 'name', 'description', 'due_date']
+        fields = ['giver', 'taker', 'name', 'description', 'due_date']
 
-        def validate(self, data):
-            """
-            Check that start is before finish.
-            """
-            if data['pub_date'] > data['due_date']:
-                raise serializers.ValidationError("finish must occur after start")
-            return data
+    def create(self, validated_data):
+        giver = validated_data['giver']
+        taker = validated_data['taker']
+
+        due_date = validated_data['due_date']
+
+        if giver == taker:
+            raise serializers.ValidationError('Sender is the same as receiver!')
+        if date.today() >= due_date:
+            raise serializers.ValidationError('You can\'t lend item for the past!')
+
+        transaction = Transaction.objects.create(**validated_data)
+        transaction.save()
+        return transaction
 
 
 class UpdateTransactionSerializer(serializers.ModelSerializer):
