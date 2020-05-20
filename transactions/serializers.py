@@ -39,7 +39,7 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
         due_date = validated_data['due_date']
 
         if giver == taker:
-            raise serializers.ValidationError('Sender is the same as receiver!')
+            raise serializers.ValidationError('You already own this item, silly!')
         if date.today() >= due_date:
             raise serializers.ValidationError('You can\'t lend item for the past!')
 
