@@ -12,8 +12,8 @@ class Transaction(models.Model):
     #sender_is_giver = models.BooleanField(blank=False, default=True)
     name = models.CharField(max_length=50, blank=False)
     description = models.CharField(max_length=200, blank=False)
-    pub_date = models.DateField('date published', default=datetime.now)
-    due_date = models.DateField('due date')
+    pub_date = models.DateField(default=datetime.now)
+    due_date = models.DateField()
     status = models.CharField(max_length=50, blank=False, default='not_confirmed')
     #photo = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 

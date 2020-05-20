@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework import permissions
-from transaction.models import Transaction, Money
+from transaction.models import Transaction
 from transaction.serializers import TransactionsListSerializer, CreateTransactionSerializer, UpdateTransactionSerializer
 from transaction.permissions import IsInTransaction
 # Create your views here.
@@ -23,9 +23,12 @@ class CreateTransactionView(generics.CreateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = CreateTransactionSerializer
 
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class UpdateTransactionView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Transaction.objects.all()
     serializer_class = UpdateTransactionSerializer
+
     permission_classes = [IsInTransaction]
 

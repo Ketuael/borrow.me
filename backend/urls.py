@@ -49,17 +49,15 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path(transactions_root_url + '/', transaction_views.TransactionsListView.as_view(), name='transaction-list'),
-    path(transactions_root_url + '/money', transaction_views.MoneyListView.as_view(), name='money-list'),
-    path(transactions_root_url + '/<int:pk>/balance', transaction_views.BalanceView.as_view(), name='balance-list'),
-    path(transactions_root_url + '/create', transaction_views.CreateTransactionView.as_view(), name='transaction-create'),
-    path(transactions_root_url + '/create/money', transaction_views.CreateTransactionMoneyView.as_view(), name='money-create'),
-    path(transactions_root_url + '/<int:pk>/update', transaction_views.UpdateTransactionView.as_view(),
+    path(transactions_root_url + '/items/', transaction_views.TransactionsListView.as_view(), name='transaction-list'),
+    # path(transactions_root_url + '/money/', transaction_views.MoneyListView.as_view(), name='money-list'),
+    path(transactions_root_url + '/create/item', transaction_views.CreateTransactionView.as_view(), name='transaction-create'),
+    #path(transactions_root_url + '/create/money', transaction_views.CreateTransactionMoneyView.as_view(), name='money-create'),
+    path(transactions_root_url + '/items/<int:pk>/update', transaction_views.UpdateTransactionView.as_view(),
          name='transaction-update'),
-    path(transactions_root_url + '/<int:pk>/remove',  transaction_views.RemoveTransactionView.as_view(),
-         name='transaction-remove'),
+    # path(transactions_root_url + '/<int:pk>/balance', transaction_views.BalanceView.as_view(), name='balance-list'),
 ]
 
 urlpatterns += [
                    path('api-auth/', include('rest_framework.urls')),
-               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
