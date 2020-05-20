@@ -9,15 +9,11 @@ from users.models import User
 class TransactionsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['sender', 'receiver', 'nazwa', 'opis', 'pub_date', 'due_date', 'status', 'photo']
+        fields = ['id', 'giver', 'taker', 'name', 'description', 'pub_date', 'due_date', 'status']
 
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['sender', 'receiver', 'nazwa', 'opis', 'pub_date', 'due_date', 'status', 'photo']
+        fields = ['id', 'giver', 'taker', 'name', 'description', 'pub_date', 'due_date', 'status']
 
-    def create(self, validated_data):
-        transaction = Transaction.objects.create_user(**validated_data)
-        transaction.save()
-        return transaction
