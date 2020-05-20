@@ -2,7 +2,7 @@ from rest_framework import serializers
 from users.serializers import UserListSerializer
 from friendships.models import Friendship
 from transactions.models import MoneyTransaction
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class FriendshipListSerializer(serializers.ModelSerializer):
@@ -75,17 +75,17 @@ class AddFriendSerializer(serializers.ModelSerializer):
         receiver = validated_data['receiver']
 
         if sender == receiver:
-            raise ValidationError('Sender is the same as receiver!')
+            raise serializers.ValidationError('You are friend with yourself already :).')
         else:
             try:
                 Friendship.objects.get(sender=sender, receiver=receiver)
-                raise ValidationError('This friendship already exists!')
+                raise serializers.ValidationError('This friendship already exists!')
             except ObjectDoesNotExist:
                 pass
 
             try:
                 Friendship.objects.get(sender=receiver, receiver=sender)
-                raise ValidationError('This friendship already exists!')
+                raise serializers.ValidationError('This friendship already exists!')
             except ObjectDoesNotExist:
                 pass
 
