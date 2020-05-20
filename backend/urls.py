@@ -28,7 +28,7 @@ urlpatterns = [
     path(users_root_url, users_api_root, name='users-api'),
     path(friends_root_url, friends_api_root, name='friends-api'),
     path(transactions_root_url, transactions_api_root, name='transcations-api'),
-
+]
 
 urlpatterns += [
     path(users_root_url + '/', user_views.UserListView.as_view(), name='user-list'),
