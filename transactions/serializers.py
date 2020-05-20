@@ -59,10 +59,11 @@ class UpdateTransactionSerializer(serializers.ModelSerializer):
 class MoneyTransactionsListSerializer(serializers.ModelSerializer):
 
     friend = serializers.SerializerMethodField()
+    ammount = serializers.SerializerMethodField()
 
     class Meta:
         model = MoneyTransaction
-        fields = ['id', 'giver', 'taker', 'ammount']
+        fields = ['id', 'friend', 'ammount']
 
     def get_friend(self, obj):
         user = self.context['request'].user
@@ -72,11 +73,28 @@ class MoneyTransactionsListSerializer(serializers.ModelSerializer):
         else:
             return UserListSerializer(obj.giver).data
 
+    def get_ammount(self, obj):
+        if obj.giver == self.context['request'].user:
+            return obj.ammount
+        else:
+            return (-1)*obj.ammount
+
 
 class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MoneyTransaction
         fields = ['giver', 'taker', 'ammount']
+
+    def create(self, validated_data):
+        giver = validated_data['giver']
+        taker = validated_data['taker']
+
+        if giver == taker:
+            raise serializers.ValidationError('You can\'t lend money to yourself... do you?')
+
+        transaction = MoneyTransaction.objects.create(**validated_data)
+        transaction.save()
+        return transaction
 
 
 class BalanceSerializer(serializers.ModelSerializer):
