@@ -35,10 +35,10 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
 
         fields = ['giver', 'taker', 'name', 'description', 'due_date']
 
-    def create(self, validated_data):
-        giver = validated_data['giver']
-        taker = validated_data['taker']
-        due_date = validated_data['due_date']
+    def validate(self, data):
+        giver = data['giver']
+        taker = data['taker']
+        due_date = data['due_date']
 
         if giver == taker:
             raise serializers.ValidationError('You already own this item, silly!')
@@ -60,9 +60,7 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
         if not is_friend:
             raise serializers.ValidationError('You aren\'t friend of this User, so you can\'t create transaction with him')
 
-        transaction = Transaction.objects.create(**validated_data)
-        transaction.save()
-        return transaction
+        return data
 
 
 class UpdateTransactionSerializer(serializers.ModelSerializer):
@@ -71,6 +69,17 @@ class UpdateTransactionSerializer(serializers.ModelSerializer):
         fields = ['name', 'description', 'due_date', 'status']
 
     # item - monetary divider
+
+    def validate(self, data):
+        due_date = data['due_date']
+        status = data['status']
+
+        if date.today() >= due_date:
+            raise serializers.ValidationError('You can\'t lend item for the past!')
+        if status != "not_confirmed":
+            raise serializers.ValidationError('This is unchangeable dummy field, don\'t touch it :).')
+
+        return data
 
 
 class MoneyTransactionsListSerializer(serializers.ModelSerializer):
@@ -107,9 +116,9 @@ class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You must give/take positive ammount of money.")
         return value
 
-    def create(self, validated_data):
-        giver = validated_data['giver']
-        taker = validated_data['taker']
+    def validate(self, data):
+        giver = data['giver']
+        taker = data['taker']
 
         if giver == taker:
             raise serializers.ValidationError('You can\'t lend money to yourself... do you?')
@@ -129,8 +138,6 @@ class CreateMoneyTransactionSerializer(serializers.ModelSerializer):
         if not is_friend:
             raise serializers.ValidationError('You aren\'t friend of this User, so you can\'t create transaction with him')
 
-        transaction = MoneyTransaction.objects.create(**validated_data)
-        transaction.save()
-        return transaction
+        return data
 
 
