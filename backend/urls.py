@@ -7,11 +7,22 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from users import urls as users_urls
 from friendships import urls as friendships_urls
 from transactions import urls as transactions_urls
-from .api import api_root, users_api_root, friends_api_root, transactions_api_root
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'Users API': reverse('users-api', request=request, format=format),
+        'Friends API': reverse('friends-api', request=request, format=format),
+        'Transcations API': reverse('transcations-api', request=request, format=format),
+    })
 
 
 def go_to_api(request):
@@ -21,15 +32,10 @@ def go_to_api(request):
 urlpatterns = [
     path('', go_to_api),
     path('api/', api_root, name='api-root'),
-    path(users_urls.users_root_url, users_api_root, name='users-api'),
-    path(friendships_urls.friends_root_url, friends_api_root, name='friends-api'),
-    path(transactions_urls.transactions_root_url, transactions_api_root, name='transcations-api'),
+    path('api/users', include(users_urls), name='users-api'),
+    path('api/friends', include(friendships_urls), name='friends-api'),
+    path('api/transactions', include(transactions_urls), name='transcations-api'),
 ]
-
-
-urlpatterns += users_urls.urlpatterns
-urlpatterns += friendships_urls.urlpatterns
-urlpatterns += transactions_urls.urlpatterns
 
 
 urlpatterns += [
